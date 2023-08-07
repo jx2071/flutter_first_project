@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "719178323161",
+    "project_id": "first-project-395117",
+    "storage_bucket": "first-project-395117.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719178323161:android:71ebd14e45d8938febdac8",
+        "android_client_info": {
+          "package_name": "us.parii.first_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719178323161-qubrv89mb6s8hggrvmtf8obom5enkt35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC72Kaet08WX1XJUTGsfezxhQQYxnlpRsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719178323161-qubrv89mb6s8hggrvmtf8obom5enkt35.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
