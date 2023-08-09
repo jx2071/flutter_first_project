@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_app/constants/routes.dart';
+import 'package:first_app/services/auth/auth_exceptions.dart';
+import 'package:first_app/services/auth/auth_service.dart';
 import 'package:first_app/utilities/showErrorDialog.dart';
 
 import 'package:flutter/material.dart';
@@ -63,41 +64,32 @@ class _RegisterViewState extends State<RegisterView> {
                   final email = _emailController.text;
                   final password = _passwordController.text;
                   try {
-                    final userCredential = await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                            email: email, password: password);
-                    log(userCredential.toString());
-                    final user = FirebaseAuth.instance.currentUser;
-                    await user?.sendEmailVerification();
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'weak-password') {
-                      log('The password provided is too weak.');
-                      await showErrorDialog(
-                        context,
-                        'The password provided is too weak.',
-                      );
-                    } else if (e.code == 'email-already-in-use') {
-                      log('The account already exists for that email.');
-                      await showErrorDialog(
-                        context,
-                        'The account already exists for that email.',
-                      );
-                    } else if (e.code == 'invalid-email') {
-                      log('The email address is not valid.');
-                      await showErrorDialog(
-                        context,
-                        'The email address is not valid.',
-                      );
-                    } else {
-                      await showErrorDialog(
-                        context,
-                        'Error: ${e.code}',
-                      );
-                    }
+                    final user = await AuthService.firebase()
+                        .createUser(email: email, password: password);
+                    log(user.toString());
+                    await AuthService.firebase().sendEmailVerification();
+                  } on WeakPasswordAuthException {
+                    log('The password provided is too weak.');
+                    await showErrorDialog(
+                      context,
+                      'The password provided is too weak.',
+                    );
+                  } on EmailAlreadyInUseAuthException {
+                    log('The account already exists for that email.');
+                    await showErrorDialog(
+                      context,
+                      'The account already exists for that email.',
+                    );
+                  } on InvalidEmailAuthException {
+                    log('The email address is not valid.');
+                    await showErrorDialog(
+                      context,
+                      'The email address is not valid.',
+                    );
                   } catch (e) {
                     await showErrorDialog(
                       context,
-                      e.toString(),
+                      'Error: ${e.toString()}',
                     );
                   }
                 },

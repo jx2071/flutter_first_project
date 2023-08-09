@@ -1,0 +1,1 @@
+enum MenuAction { settings, logout }
