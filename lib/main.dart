@@ -1,10 +1,13 @@
+import 'package:first_app/constants/routes.dart';
+import 'package:first_app/views/verify_email_view.dart';
+import 'package:first_app/views/register_view.dart';
+import 'package:first_app/views/login_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:first_app/views/login_view.dart';
-import 'package:first_app/views/register_view.dart';
-import 'package:first_app/views/verify_email_view.dart';
 import 'dart:developer' show log;
+
 import 'firebase_options.dart';
 
 void main() {
@@ -25,9 +28,10 @@ class App extends StatelessWidget {
         ),
         home: const HomePage(),
         routes: {
-          '/login': (context) => const LoginView(),
-          '/register': (context) => const RegisterView(),
-          '/notes': (context) => const NotesView(),
+          loginRoute: (context) => const LoginView(),
+          registerRoute: (context) => const RegisterView(),
+          notesRoute: (context) => const NotesView(),
+          verifyEmailRoute: (context) => const VerifyEmailView(),
         });
   }
 }
@@ -71,6 +75,8 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,12 +87,14 @@ class _NotesViewState extends State<NotesView> {
             onSelected: (action) async {
               switch (action) {
                 case MenuAction.logout:
-                  final logout = await showAlertDialog(context);
+                  final logout = await showLogoutDialog(context);
                   log(logout.toString());
                   if (logout) {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/login', (route) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (route) => false,
+                    );
                   }
                   break;
                 default:
@@ -106,12 +114,18 @@ class _NotesViewState extends State<NotesView> {
           )
         ],
       ),
-      body: const Center(child: Text('Welcome to the notes app!')),
+      body: Center(
+          child: Column(
+        children: [
+          const Text('Welcome to the notes app!'),
+          Text('${user?.email}'),
+        ],
+      )),
     );
   }
 }
 
-Future<bool> showAlertDialog(BuildContext context) {
+Future<bool> showLogoutDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
     builder: (context) {

@@ -1,28 +1,37 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_app/constants/routes.dart';
 import 'package:flutter/material.dart';
 
-class VerifyEmailView extends StatefulWidget {
+class VerifyEmailView extends StatelessWidget {
   const VerifyEmailView({super.key});
 
-  @override
-  State<VerifyEmailView> createState() => _VerifyEmailViewState();
-}
-
-class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Verify Email")),
-      body: Column(children: [
-        const Text("Please verify your email"),
-        TextButton(
-          onPressed: () async {
-            final user = FirebaseAuth.instance.currentUser;
-            await user?.sendEmailVerification();
-          },
-          child: const Text("Email verification sent."),
-        )
-      ]),
+      body: Center(
+        child: Column(children: [
+          const SizedBox(height: 50),
+          const Text('We\'ve sent an email to your email address.'),
+          const SizedBox(height: 12),
+          const Text('If you don\'t see the email,'),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              await user?.sendEmailVerification();
+            },
+            child: const Text("Click to resend email verification."),
+          ),
+          TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+              },
+              child: const Text("Verified? Go to Sign In")),
+        ]),
+      ),
     );
   }
 }
