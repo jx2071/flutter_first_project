@@ -57,7 +57,7 @@ class _NotesViewState extends State<NotesView> {
           child: Column(
         children: [
           const Text('Welcome to the notes app!'),
-          Text('${user?.email}'),
+          //Text('${user?.email}'),
         ],
       )),
     );
