@@ -29,6 +29,13 @@
             {
               "client_id": "719178323161-qubrv89mb6s8hggrvmtf8obom5enkt35.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "719178323161-72hde49sj23sno8g48umj2cqlpdfcbdk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "us.parii.firstApp"
+              }
             }
           ]
         }
