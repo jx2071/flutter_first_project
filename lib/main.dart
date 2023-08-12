@@ -1,9 +1,10 @@
 import 'package:first_app/constants/routes.dart';
 import 'package:first_app/services/auth/auth_service.dart';
-import 'package:first_app/views/notes_view.dart';
+import 'package:first_app/views/notes/notes_view.dart';
 import 'package:first_app/views/verify_email_view.dart';
 import 'package:first_app/views/register_view.dart';
 import 'package:first_app/views/login_view.dart';
+import 'package:first_app/views/notes/new_note_view.dart';
 
 import 'package:flutter/material.dart';
 
@@ -31,6 +32,7 @@ class App extends StatelessWidget {
           registerRoute: (context) => const RegisterView(),
           notesRoute: (context) => const NotesView(),
           verifyEmailRoute: (context) => const VerifyEmailView(),
+          newNoteRoute: (context) => const NewNoteView(),
         });
   }
 }
