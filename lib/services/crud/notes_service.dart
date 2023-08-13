@@ -40,7 +40,12 @@ const text = "";
 class NotesService {
   Database? _db;
 
-  NotesService._sharedInstance();
+  NotesService._sharedInstance() {
+    _notesStreamController =
+        StreamController<List<DatabaseNote>>.broadcast(onListen: () {
+      _notesStreamController.sink.add(_notes);
+    });
+  }
 
   static final NotesService _shared = NotesService._sharedInstance();
 
@@ -56,14 +61,14 @@ class NotesService {
   }
 
   List<DatabaseNote> _notes = [];
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
   Future<void> _cacheNotes() async {
     final allNotes = await getAllNotes();
     _notes = allNotes.toList();
+
     _notesStreamController.add(_notes);
   }
 

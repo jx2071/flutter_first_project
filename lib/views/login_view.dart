@@ -1,7 +1,7 @@
 import 'package:first_app/constants/routes.dart';
 import 'package:first_app/services/auth/auth_exceptions.dart';
 import 'package:first_app/services/auth/auth_service.dart';
-import 'package:first_app/utilities/showErrorDialog.dart';
+import 'package:first_app/utilities/dialogs/error_dialog.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:developer' show log;
@@ -80,19 +80,19 @@ class _LoginViewState extends State<LoginView> {
                   } on UserNotFoundAuthException {
                     log('No user found for that email.');
                     await showErrorDialog(
-                      context,
-                      'Email not registered.',
+                      context: context,
+                      text: 'Email not registered.',
                     );
                   } on WrongPasswordAuthException {
                     log('Wrong password provided for that user.');
                     await showErrorDialog(
-                      context,
-                      'Wrong credentials.',
+                      context: context,
+                      text: 'Wrong credentials.',
                     );
                   } catch (e) {
                     await showErrorDialog(
-                      context,
-                      e.toString(),
+                      context: context,
+                      text: e.toString(),
                     );
                   }
                 },

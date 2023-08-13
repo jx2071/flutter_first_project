@@ -1,7 +1,7 @@
 import 'package:first_app/constants/routes.dart';
 import 'package:first_app/services/auth/auth_exceptions.dart';
 import 'package:first_app/services/auth/auth_service.dart';
-import 'package:first_app/utilities/showErrorDialog.dart';
+import 'package:first_app/utilities/dialogs/error_dialog.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:developer' show log;
@@ -71,25 +71,25 @@ class _RegisterViewState extends State<RegisterView> {
                   } on WeakPasswordAuthException {
                     log('The password provided is too weak.');
                     await showErrorDialog(
-                      context,
-                      'The password provided is too weak.',
+                      context: context,
+                      text: 'The password provided is too weak.',
                     );
                   } on EmailAlreadyInUseAuthException {
                     log('The account already exists for that email.');
                     await showErrorDialog(
-                      context,
-                      'The account already exists for that email.',
+                      context: context,
+                      text: 'The account already exists for that email.',
                     );
                   } on InvalidEmailAuthException {
                     log('The email address is not valid.');
                     await showErrorDialog(
-                      context,
-                      'The email address is not valid.',
+                      context: context,
+                      text: 'The email address is not valid.',
                     );
                   } catch (e) {
                     await showErrorDialog(
-                      context,
-                      'Error: ${e.toString()}',
+                      context: context,
+                      text: 'Error: ${e.toString()}',
                     );
                   }
                 },
