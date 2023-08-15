@@ -1,44 +1,19 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:first_app/extensions/list/filter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart'
     show MissingPlatformDirectoryException, getApplicationDocumentsDirectory;
 import 'package:path/path.dart' show join;
 import 'package:first_app/services/crud/crud_exceptions.dart';
-
-// Database Constants
-const dbName = 'notes.db';
-const noteTable = 'note';
-const userTable = 'user';
-const idColumn = 'id';
-const emailColumn = 'email';
-const userIdColumn = 'user_id';
-const textColumn = 'text';
-const cloudSyncColumn = 'cloud_sync';
-
-const createNoteTableSQL = '''
-      CREATE TABLE IF NOT EXISTS "note"(
-      "id" INTEGER NOT NULL,
-      "user_id" INTEGER NOT NULL,
-      "text" TEXT,
-      "cloud_sync" INT NOT NULL DEFAULT 0,
-      FOREIGN KEY ("user_id") REFERENCES "user"("id"),
-      PRIMARY KEY ("id" AUTOINCREMENT)
-      );
-      ''';
-const createUserTableSQL = '''
-      CREATE TABLE IF NOT EXISTS "user"(
-      "id" INTEGER NOT NULL,
-      "email" TEXT NOT NULL UNIQUE,
-      PRIMARY KEY("id" AUTOINCREMENT)
-      );
-      ''';
-
-const text = "";
+import "package:first_app/services/crud/crud_constants.dart";
 
 class NotesService {
   Database? _db;
+
+  DatabaseUser? _user;
 
   NotesService._sharedInstance() {
     _notesStreamController =
@@ -61,9 +36,17 @@ class NotesService {
   }
 
   List<DatabaseNote> _notes = [];
-  late final _notesStreamController;
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
 
-  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
+  Stream<List<DatabaseNote>> get allNotes =>
+      _notesStreamController.stream.filter((note) {
+        final currentUser = _user;
+        if (currentUser != null) {
+          return note.userId == currentUser.id;
+        } else {
+          throw UserNotSetBeforeReadingNotesException();
+        }
+      });
 
   Future<void> _cacheNotes() async {
     final allNotes = await getAllNotes();
@@ -76,7 +59,7 @@ class NotesService {
     try {
       await open();
     } on DatabaseAlreadyOpenException {
-      //
+      //log("DB Already Open");
     }
   }
 
@@ -156,11 +139,18 @@ class NotesService {
     return DatabaseUser.fromRow(result.first);
   }
 
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCurrentUser = true,
+  }) async {
     try {
-      return await getUser(email: email);
+      final user = await getUser(email: email);
+      if (setAsCurrentUser) _user = user;
+      return user;
     } on UserNotFoundException {
-      return await createUser(email: email);
+      final user = await createUser(email: email);
+      if (setAsCurrentUser) _user = user;
+      return user;
     } catch (e) {
       rethrow;
     }

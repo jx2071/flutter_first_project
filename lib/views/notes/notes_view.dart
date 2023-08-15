@@ -19,12 +19,12 @@ class NotesView extends StatefulWidget {
 class _NotesViewState extends State<NotesView> {
   late final NotesService _notesService;
 
-  String get userEmail => AuthService.firebase().currentUser!.email!;
+  String get userEmail => AuthService.firebase().currentUser!.email;
 
   @override
   void initState() {
     _notesService = NotesService();
-    _notesService.open();
+    //_notesService.open();
     super.initState();
   }
 
@@ -87,18 +87,48 @@ class _NotesViewState extends State<NotesView> {
                             final allNotes =
                                 snapshot.data as List<DatabaseNote>;
                             log(allNotes.toString());
-                            return NotesListView(
-                              notes: allNotes,
-                              onDeleteNote: (note) async {
-                                await _notesService.deleteNote(id: note.id);
-                              },
-                              onTap: (note) {
-                                Navigator.of(context).pushNamed(
-                                  createUpdateNoteRoute,
-                                  arguments: note,
-                                );
-                              },
-                            );
+                            if (allNotes.isNotEmpty) {
+                              return NotesListView(
+                                notes: allNotes,
+                                onDeleteNote: (note) async {
+                                  await _notesService.deleteNote(id: note.id);
+                                },
+                                onTap: (note) {
+                                  Navigator.of(context).pushNamed(
+                                    createUpdateNoteRoute,
+                                    arguments: note,
+                                  );
+                                },
+                              );
+                            } else {
+                              return Center(
+                                  child: Column(
+                                children: [
+                                  const SizedBox(height: 20),
+                                  const Text("You don't have any notes",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      )),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text("Create Now",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          )),
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pushNamed(createUpdateNoteRoute);
+                                        },
+                                        icon: const Icon(Icons.add),
+                                        tooltip: "Create A New Note",
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ));
+                            }
                           } else {
                             return const CircularProgressIndicator();
                           }
