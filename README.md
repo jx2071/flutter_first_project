@@ -1,16 +1,18 @@
 # MyNote
 
-A new Flutter project.
+A Flutter Note project using Bloc.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Run the following command to get all the dependencies:
 
-A few resources to get you started if this is your first Flutter project:
+    ``` 
+    flutter pub get
+    ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Firebase
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Install Firebase CLI and configure it with your Firebase project.
+https://firebase.google.com/docs/flutter/setup?platform=ios
+
+https://stackoverflow.com/questions/70404936/missing-firebase-options-dart-file-in-course-get-to-know-firebase-for-flutter
