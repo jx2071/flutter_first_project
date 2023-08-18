@@ -1,10 +1,8 @@
-import 'package:first_app/constants/routes.dart';
 import 'package:first_app/services/auth/auth_exceptions.dart';
 import 'package:first_app/services/auth/bloc/auth_bloc.dart';
 import 'package:first_app/services/auth/bloc/auth_event.dart';
 import 'package:first_app/services/auth/bloc/auth_state.dart';
 import 'package:first_app/utilities/dialogs/error_dialog.dart';
-import 'package:first_app/utilities/dialogs/loading_dialog.dart';
 
 import 'dart:developer' show log;
 import 'package:flutter/material.dart';
@@ -20,8 +18,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-
-  CloseDialog? _closeDialog;
 
   @override
   void initState() {
@@ -42,16 +38,6 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
-          final closeDialog = _closeDialog;
-          if (!state.isLoading && closeDialog != null) {
-            closeDialog();
-            _closeDialog = null;
-          }
-          if (state.isLoading && closeDialog == null) {
-            _closeDialog =
-                showLoadingDialog(context: context, text: "Loading...");
-          }
-
           if (state.exception is UserNotFoundAuthException) {
             log('No user found for that email.');
             await showErrorDialog(
