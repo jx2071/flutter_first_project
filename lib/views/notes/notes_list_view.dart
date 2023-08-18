@@ -1,6 +1,4 @@
-import 'package:first_app/constants/routes.dart';
 import 'package:first_app/services/cloud/cloud_note.dart';
-import 'package:first_app/services/crud/notes_service.dart';
 import 'package:first_app/utilities/dialogs/delete_dialog.dart';
 import 'package:flutter/material.dart';
 

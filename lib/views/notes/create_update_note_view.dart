@@ -2,9 +2,7 @@ import 'package:first_app/services/auth/auth_service.dart';
 import 'package:first_app/utilities/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:first_app/utilities/generics/get_arguments.dart';
 import 'package:flutter/material.dart';
-import 'package:first_app/services/crud/notes_service.dart';
 import 'package:first_app/services/cloud/firebase_cloud_storage.dart';
-import 'package:first_app/services/cloud/cloud_storage_exceptions.dart';
 import 'package:first_app/services/cloud/cloud_note.dart';
 import 'package:share_plus/share_plus.dart';
 
